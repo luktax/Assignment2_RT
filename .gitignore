@@ -1,0 +1,26 @@
+# --- ROS2 generated folders ---
+build/
+install/
+log/
+
+# --- VSCode settings ---
+.vscode/
+
+# --- CMake files ---
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# --- Python cache ---
+__pycache__/
+*.pyc
+
+# --- macOS ---
+.DS_Store
+
+# --- Ignorare vecchi esercizi ---
+exercise1/
+first_package_py/
+first_pkg_cpp/
+turtlesim_controller/

@@ -31,7 +31,9 @@ class UI: public rclcpp::Node{
             flag = 0;
         }
 
-        if (flag == 0 && counter>=20){ 
+        if (flag == 0 && counter>=20){
+            if (!rclcpp::ok()) return;
+
             while(turtle != 1 && turtle != 2){
                 std::cout << "Press 1 or 2 to select a turtle";
                 std::cin >> turtle;

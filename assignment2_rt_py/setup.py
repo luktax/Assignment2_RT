@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'assignment2_rt_PY'
+package_name = 'assignment2_rt_py'
 
 setup(
     name=package_name,

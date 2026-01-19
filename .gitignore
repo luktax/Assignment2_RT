@@ -12,6 +12,10 @@ CMakeCache.txt
 cmake_install.cmake
 Makefile
 
+# C++
+*.o
+*.so
+
 # --- Python cache ---
 __pycache__/
 *.pyc
@@ -24,3 +28,7 @@ exercise1/
 first_package_py/
 first_pkg_cpp/
 turtlesim_controller/
+turtlesim_custom_msgs/
+turtle_spawn/
+assignment1_rt/
+bme_gazebo_sensors/

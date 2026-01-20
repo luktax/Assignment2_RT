@@ -1,0 +1,3 @@
+float64 distance
+uint8 direction
+float64 threshold

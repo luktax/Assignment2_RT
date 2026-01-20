@@ -15,9 +15,10 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
-# Genera le interfacce dai file .srv
+# Genera le interfacce dai file .srv .msg
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetThreshold.srv"
+  "msg/CustomMessage.msg"
 )
 
 # -----------------------------

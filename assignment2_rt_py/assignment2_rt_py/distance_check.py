@@ -1,9 +1,11 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
+import math
 
 from rcl_interfaces.msg import ParameterEvent
 from std_msgs.msg import Bool
+from assignment2_rt_cpp.msg import CustomMessage
 
 class distance_check(Node):
     def __init__(self):
@@ -12,6 +14,7 @@ class distance_check(Node):
         
         self.threshold = 0.5 # Default fallback
         self.safety_pub = self.create_publisher(Bool, '/safety_alert', 10)
+        self.custom_pub = self.create_publisher(CustomMessage, '/custom_message', 10)
         
         # Subscribe to parameter events to monitor changes
         self.param_sub = self.create_subscription(
@@ -23,31 +26,45 @@ class distance_check(Node):
 
     def param_event_callback(self, msg):
         # check if event comes from the right node
-        if msg.node == '/threshold_server':
-            for param in msg.changed_parameters:
-                if param.name == 'threshold':
-                    self.threshold = param.value.double_value
-                    self.get_logger().info(f'Threshold updated to {self.threshold}')
+        for param in msg.changed_parameters:
+            if param.name == 'threshold':
+                self.threshold = param.value.double_value
+                self.get_logger().info(f'Threshold updated to {self.threshold}')
 
     def listener_callback(self, msg):
-        # Filter out infinite or NaN values if any, though typically ranges adhere to min/max
-        valid_ranges = [r for r in msg.ranges if not (float('inf') == r or float('nan') == r)]
-        
-        if not valid_ranges:
-            return
+        below_threshold = [
+            (i, r)
+            for i, r in enumerate(msg.ranges)
+            if r < self.threshold and r != float('inf') and r == r
+        ]
 
-        # Check if ANY range is below the threshold
-        any_below = any(r < self.threshold for r in valid_ranges)
-        
+        any_below = len(below_threshold) > 0
+
+        # Publish safety alert always
         msg_bool = Bool()
         msg_bool.data = any_below
         self.safety_pub.publish(msg_bool)
-        
+
         if any_below:
+            # compute closest obstacle and direction
+            closest_index, closest_distance = min(below_threshold, key=lambda x: x[1])
+            angle = msg.angle_min + msg.angle_increment * closest_index
+            if -math.pi/4 <= angle <= math.pi/4:
+                direction = 0
+            elif math.pi/4 < angle <= 3*math.pi/4:
+                direction = 1
+            elif -3*math.pi/4 <= angle < -math.pi/4:
+                direction = 2
+            else:
+                direction = 3
+
+            custom_message = CustomMessage()
+            custom_message.distance = closest_distance
+            custom_message.direction = direction
+            custom_message.threshold = self.threshold
+            self.custom_pub.publish(custom_message)
+
             self.get_logger().warn(f'OBSTACLE DETECTED! Range < {self.threshold}')
-        else:
-            # Optional: Log okay state occasionally or just stay silent
-            pass
 
 def main(args=None):
     rclpy.init(args=args)

@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'distance_check = assignment2_rt_py.distance_check:main'
         ],
     },
 )

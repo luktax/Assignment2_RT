@@ -12,6 +12,7 @@ find_package(ament_cmake REQUIRED)
 # find_package(<dependency> REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 # Genera le interfacce dai file .srv
@@ -36,7 +37,7 @@ ament_target_dependencies(UI rclcpp geometry_msgs)
 # Nodo Bridge (pubblica cmd_vel)
 # -----------------------------
 add_executable(user_twist_publisher src/user_twist_publisher.cpp)
-ament_target_dependencies(user_twist_publisher rclcpp geometry_msgs)
+ament_target_dependencies(user_twist_publisher rclcpp geometry_msgs std_msgs)
 
 # Installazione degli eseguibili
 install(TARGETS

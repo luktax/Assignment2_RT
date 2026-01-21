@@ -23,6 +23,7 @@ class distance_check(Node):
             self.param_event_callback,
             10
         )
+        self.get_logger().info(f'Distance_check node ready, checking distance...')
 
     def param_event_callback(self, msg):
         # check if event comes from the right node

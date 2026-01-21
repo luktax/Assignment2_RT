@@ -17,6 +17,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 # Genera le interfacce dai file .srv .msg
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "srv/GetAverage.srv"
   "srv/SetThreshold.srv"
   "msg/CustomMessage.msg"
 )
@@ -39,6 +40,9 @@ ament_target_dependencies(UI rclcpp geometry_msgs)
 # -----------------------------
 add_executable(user_twist_publisher src/user_twist_publisher.cpp)
 ament_target_dependencies(user_twist_publisher rclcpp geometry_msgs std_msgs)
+rosidl_target_interfaces(user_twist_publisher
+  ${PROJECT_NAME} "rosidl_typesupport_cpp"
+)
 
 # Installazione degli eseguibili
 install(TARGETS

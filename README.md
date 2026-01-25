@@ -67,8 +67,10 @@ PROJECT DIRECTORIES
 MSG
   1. CustomMessage.msg
 float64 distance
-uint8 direction
+uint8 direction  #FRONT = 0, LEFT = 1, RIGHT= 2, BACK = 3
 float64 threshold
+
+ros2 topic ec/custom_message #to check the message while the obstacle is below the threhold
 
 SRV
   1. GetAverage.srv
@@ -78,8 +80,13 @@ float32 angular_average
 bool success
 string message
 
+ros2 service call /get_average assignment2_rt_cpp/srv/GetAverage "{}" #to get the average
+
   2. SetThreshold.srv
 float32 threshold       #request
 ---
 bool success            #response
 string message
+
+ros2 service call /set_threshold assignment2_rt_cpp/srv/SetThreshold "{threshold: 0.8}" 
+#to change the threhold value
